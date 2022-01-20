@@ -1,21 +1,26 @@
 <template>
-  <h1>lego标准模版</h1>
-  <hello msg="你好世界"/>
-  <ul>
-    <li>支持ts、vue3、eslint</li>
-  </ul>
+  <div class="app-container">
+    <a-spin v-if="showLoading" tip="读取中" class="global-spinner"/>
+    <router-view/>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
-import Hello from './components/Hello'
+import { defineComponent, ref } from 'vue'
 
-var b = 100
-let a = 1
 export default defineComponent({
   name: 'App',
   components: {
-    Hello,
+  },
+  setup() {
+    const showLoading = ref(true)
+    setTimeout(() => {
+      showLoading.value = false
+    }, 1000)
+
+    return {
+      showLoading,
+    }
   },
 })
 </script>
@@ -27,6 +32,5 @@ export default defineComponent({
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
