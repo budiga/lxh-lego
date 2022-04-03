@@ -18,7 +18,7 @@ export interface ActionPayload {
   data?: any;
   searchParams?: { [key: string]: any };
 }
-//第二步，确定参数
+// 第二步，确定参数
 export function actionWrapper(url: string, commitName: string, config: AxiosRequestConfig = { method: 'get'}) {
   // 第一步 不管三七二十一，先返回一个函数和原来的函数处理一摸一样
   return async (context: ActionContext<any, any>, payload: ActionPayload = {}) => {
