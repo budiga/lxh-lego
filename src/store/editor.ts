@@ -6,6 +6,7 @@ import store, { GlobalDataProps, actionWrapper } from './index'
 import { insertAt } from '../helper'
 import { AllComponentProps, textDefaultProps, imageDefaultProps } from 'lego-bricks'
 import { RespWorkData, ListData, RespData, RespListData } from './respTypes'
+import { TextComponentProps } from '../defaultProps'
 export type MoveDirection = 'Up' | 'Down' | 'Left' | 'Right'
 
 export interface HistoryProps {
@@ -83,7 +84,7 @@ export interface ComponentData {
   props: Partial<AllComponentProps>;
   // id，uuid v4 生成
   id: string;
-  // 业务组件库名称 l-text，l-image 等等 
+  // 业务组件库名称 l-text，l-image 等等
   name: 'l-text' | 'l-image' | 'l-shape';
   // 图层是否隐藏
   isHidden?: boolean;
@@ -93,9 +94,9 @@ export interface ComponentData {
   layerName?: string;
 }
 export const testComponents: ComponentData[] = [
-  { id: uuidv4(), name: 'l-text', layerName:'图层1', props: { ...textDefaultProps, text: 'hello', fontSize: '20px', color: '#000000', 'lineHeight': '1', textAlign: 'left', fontFamily: '', width: '100px', height: '100px', backgroundColor: '#efefef', left: '100px', top: '150px' }},
-  // { id: uuidv4(), name: 'l-text', layerName:'图层2', props: { ...textDefaultProps, text: 'hello2', fontSize: '10px', fontWeight: 'bold', 'lineHeight': '2', textAlign: 'left', fontFamily: '' }},
-  // { id: uuidv4(), name: 'l-text', layerName:'图层3', props: { ...textDefaultProps, text: 'hello3', fontSize: '15px', actionType: 'url', url: 'https://www.baidu.com', 'lineHeight': '3', textAlign: 'left', fontFamily: '' }},
+  { id: uuidv4(), name: 'l-text', layerName:'图层1', props: { text: 'hello', fontSize: '20px', color: 'red', 'lineHeight': '1', textAlign: 'left', fontFamily: '', width: '100px', height: '100px', backgroundColor: '#666', left: '100px', top: '150px' }},
+  { id: uuidv4(), name: 'l-text', layerName:'图层2', props: { text: 'hello2', fontSize: '10px', fontWeight: 'bold', 'lineHeight': '2', textAlign: 'left', fontFamily: '' }},
+  { id: uuidv4(), name: 'l-text', layerName:'图层3', props: { text: 'hello3', fontSize: '40px', actionType: 'url', url: 'https://www.baidu.com', 'lineHeight': '3', textAlign: 'left', fontFamily: '' }},
   // { id: uuidv4(), name: 'l-image', layerName:'图层4', props: { ...imageDefaultProps, src: 'http://vue-maker.oss-cn-hangzhou.aliyuncs.com/vue-marker/5f3e3a17c305b1070f455202.jpg', width: '100px' }},
 ]
 const pageDefaultProps = { backgroundColor: '#ffffff', backgroundImage: '', backgroundRepeat: 'no-repeat', backgroundSize: 'cover', height: '560px' }
@@ -107,7 +108,7 @@ const debounceChange = (callback: (...args: any) => void, timeout = 1000) => {
     timer = window.setTimeout(() => {
       timer = 0
       callback(...args)
-    }, timeout) 
+    }, timeout)
   }
 }
 const pushHistory = (state: EditorProps, historyRecord: HistoryProps) => {
@@ -118,7 +119,7 @@ const pushHistory = (state: EditorProps, historyRecord: HistoryProps) => {
     // move historyIndex to unmoved
     state.historyIndex = -1
   }
-  // check length 
+  // check length
   if (state.histories.length < state.maxHistoryNumber) {
     state.histories.push(historyRecord)
   } else {
@@ -184,16 +185,24 @@ const editor: Module<EditorProps, GlobalDataProps> = {
       state.historyIndex = -1
       state.histories = []
     },
-    addComponent: setDirtyWrapper((state, component: ComponentData) => {
-      component.layerName = '图层' + (state.components.length + 1)
-      state.components.push(component)
-      pushHistory(state, {
+    addComponent(state, props: Partial<TextComponentProps>) {
+      const newComponent: ComponentData = {
         id: uuidv4(),
-        componentId: component.id,
-        type: 'add',
-        data: cloneDeep(component)
-      })
-    }),
+        name: 'l-text',
+        props,
+      }
+      state.components.push(newComponent)
+    },
+    // addComponent: setDirtyWrapper((state, component: ComponentData) => {
+    //   component.layerName = '图层' + (state.components.length + 1)
+    //   state.components.push(component)
+    //   pushHistory(state, {
+    //     id: uuidv4(),
+    //     componentId: component.id,
+    //     type: 'add',
+    //     data: cloneDeep(component)
+    //   })
+    // }),
     setActive(state, currentId: string) {
       state.currentElement = currentId
     },
@@ -341,7 +350,7 @@ const editor: Module<EditorProps, GlobalDataProps> = {
             updatedComponent.props[key] = value
           }
         }
-        
+
       }
     }),
     updatePage: setDirtyWrapper((state, { key, value, isRoot, isSetting }) => {
@@ -413,12 +422,12 @@ const editor: Module<EditorProps, GlobalDataProps> = {
       // 1 no history item
       // 2 move to the last item
       // 3 never undo before
-      if (state.histories.length === 0 || 
+      if (state.histories.length === 0 ||
         state.historyIndex === state.histories.length ||
         state.historyIndex === -1) {
         return true
       }
-      return false      
+      return false
     }
   }
 }
