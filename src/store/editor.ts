@@ -330,7 +330,7 @@ const editor: Module<EditorProps, GlobalDataProps> = {
         }
       }
     },
-    updateComponent: setDirtyWrapper((state, { key, value, id, isRoot }: UpdateComponentData) => {
+    updateComponent2: setDirtyWrapper((state, { key, value, id, isRoot }: UpdateComponentData) => {
       const updatedComponent = state.components.find((component) => component.id === (id || state.currentElement))
       if (updatedComponent) {
         if (isRoot) {
@@ -353,6 +353,12 @@ const editor: Module<EditorProps, GlobalDataProps> = {
 
       }
     }),
+    updateComponent(state, {key, value}) {
+      const updatedComponent = state.components.find((component) => component.id === (state.currentElement))
+      if (updatedComponent) {
+        updatedComponent.props[key as keyof TextComponentProps] = value
+      }
+    },
     updatePage: setDirtyWrapper((state, { key, value, isRoot, isSetting }) => {
       if (isRoot) {
         state.page[key as keyof PageData] = value
