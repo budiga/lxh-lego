@@ -3,7 +3,8 @@ import { GlobalDataProps, actionWrapper } from './index'
 import { RespListData, RespData } from './respTypes'
 import { PageData } from './editor'
 
-export type TemplateProps = Required<Omit<PageData, 'props' | 'setting'>>
+// export type TemplateProps = Required<Omit<PageData, 'props' | 'setting'>>
+export type TemplateProps = Omit<PageData, 'props' | 'setting'>
 
 export interface TemplatesProps {
   data: TemplateProps[];
@@ -12,9 +13,36 @@ export interface TemplatesProps {
   totalWorks: number;
 }
 
+export const  mockedTemplates = [
+  {
+    id: 1,
+    title: 'title 1',
+    author: 'author',
+    copiedCount: 100,
+    isHot: true,
+    isNew: true,
+  },
+  {
+    id: 2,
+    title: 'title 2',
+    author: 'author',
+    copiedCount: 100,
+    isHot: true,
+    isNew: true,
+  },
+  {
+    id: 3,
+    title: 'title 3',
+    author: 'author',
+    copiedCount: 100,
+    isHot: true,
+    isNew: true,
+  },
+]
+
 const templates: Module<TemplatesProps, GlobalDataProps> = {
   state: {
-    data: [],
+    data: mockedTemplates,
     totalTemplates: 0,
     works: [],
     totalWorks: 0

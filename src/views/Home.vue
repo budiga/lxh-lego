@@ -16,41 +16,44 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import { useStore } from 'vuex'
 import TemplateList from '../components/TemplateList.vue'
+
 
 export default defineComponent({
   components: {
     TemplateList
   },
   setup() {
-    const testData = [
-      {
-        id: 1,
-        title: 'title',
-        author: 'author',
-        copiedCount: 100,
-        isHot: true,
-        isNew: true,
-      },
-      {
-        id: 2,
-        title: 'title',
-        author: 'author',
-        copiedCount: 100,
-        isHot: true,
-        isNew: true,
-      },
-      {
-        id: 3,
-        title: 'title',
-        author: 'author',
-        copiedCount: 100,
-        isHot: true,
-        isNew: true,
-      },
-    ]
+    // const testData = [
+    //   {
+    //     id: 1,
+    //     title: 'title',
+    //     author: 'author',
+    //     copiedCount: 100,
+    //     isHot: true,
+    //     isNew: true,
+    //   },
+    //   {
+    //     id: 2,
+    //     title: 'title',
+    //     author: 'author',
+    //     copiedCount: 100,
+    //     isHot: true,
+    //     isNew: true,
+    //   },
+    //   {
+    //     id: 3,
+    //     title: 'title',
+    //     author: 'author',
+    //     copiedCount: 100,
+    //     isHot: true,
+    //     isNew: true,
+    //   },
+    // ]
+    const store = useStore()
     return {
-      testData,
+      testData: store.state.templates.data,
     }
   }
 })

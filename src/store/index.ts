@@ -4,7 +4,7 @@ import { createStore, ActionContext } from 'vuex'
 import templates, { TemplatesProps } from './templates'
 import user, { UserProps } from './user'
 import editor, { EditorProps } from './editor'
-import global, { GlobalStatus } from './global'
+import globalModule, { GlobalStatus } from './global'
 import { objToQueryString } from '../helper'
 import { forEach } from 'lodash-es'
 export interface GlobalDataProps {
@@ -50,7 +50,7 @@ const store = createStore({
     user,
     templates,
     editor,
-    global
+    global: globalModule,
   }
 })
 

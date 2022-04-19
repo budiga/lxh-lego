@@ -78,4 +78,8 @@ export const mapPropsToForms: IPropsToForms = {
     valueProp: 'checked',
     extraProps: { iconName: 'BoldOutlined', tip: '加粗' }
   },
+  color: {
+    text: '字体颜色',
+    component: 'color-picker',
+  },
 }

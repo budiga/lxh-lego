@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import { Module, ActionContext } from 'vuex'
-import { GlobalDataProps, actionWrapper } from './index' 
+import { GlobalDataProps, actionWrapper } from './index'
 import { RespData } from './respTypes'
 export interface UserDataProps {
   username?: string;
@@ -20,20 +20,24 @@ export interface UserProps {
   isLogin: boolean;
   token?: string;
   data: UserDataProps;
+  username: string;
 }
 
 const user: Module<UserProps, GlobalDataProps> = {
   state: {
     isLogin: false,
     data: {},
-    token: localStorage.getItem('token') || ''
+    token: localStorage.getItem('token') || '',
+    username: '',
   },
   mutations: {
     login(state, rawData: RespData<{ token: string }>) {
-      const { token } = rawData.data
-      state.token = token
-      localStorage.setItem('token', token)
-      axios.defaults.headers.common.Authorization = `Bearer ${token}`
+      // const { token } = rawData.data
+      // state.token = token
+      // localStorage.setItem('token', token)
+      // axios.defaults.headers.common.Authorization = `Bearer ${token}`
+      state.isLogin = true
+      state.username = 'lxh2'
     },
     fetchCurrentUser(state, rawData: RespData<UserDataProps>) {
       state.isLogin = true
@@ -44,6 +48,7 @@ const user: Module<UserProps, GlobalDataProps> = {
       state.isLogin = false
       localStorage.removeItem('token')
       delete axios.defaults.headers.common.Authorization
+      state.username = ''
     }
   },
   actions: {
@@ -58,7 +63,7 @@ const user: Module<UserProps, GlobalDataProps> = {
       return dispatch('login', loginData).then(() => {
         return dispatch('fetchCurrentUser')
       })
-    }   
+    }
   }
 }
 
