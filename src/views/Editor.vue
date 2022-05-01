@@ -10,6 +10,14 @@
       <a-layout-sider width="300" style="background: #fff;">
         <div style="textAlign: left;">组件列表</div>
         <component-list :list="defaultTextTemplates" @onItemClick="addItem" />
+        <uploder
+          action="http://baidu.com/api/upload"
+          drag
+          listType="picture"
+          :showUploadList="false"
+          @success="(data) => {handleUploadSuccess()}"
+          @fail="(data) => {handleUploadFail(data.file)}"
+        />
       </a-layout-sider>
       <a-layout>
         画布区域
@@ -47,17 +55,21 @@ import { useStore } from 'vuex'
 import { GlobalDataProps } from '../store/index'
 import { ComponentData } from '../store/editor'
 import LText from '../components/LText.vue'
+import LImage from '../components/LImage.vue'
 import ComponentList from '../components/ComponentsList.vue'
 import EditWrapper from '../components/EditWrapper.vue'
 import PropsTable from '../components/PropsTable.vue'
 import defaultTextTemplates from '../defaultTemplates'
+import Uploder, { IUploadFile } from '@/components/Uploader.vue'
 
 export default defineComponent({
   components: {
     LText,
+    LImage,
     ComponentList,
     EditWrapper,
     PropsTable,
+    Uploder,
   },
   setup() {
     const store = useStore<GlobalDataProps>()
@@ -74,6 +86,15 @@ export default defineComponent({
       console.log('---handle change---', e)
       store.commit('updateComponent', e)
     }
+    const handleUploadSuccess = () => {
+      console.log('---upload success---')
+    }
+    const handleUploadFail = (file: IUploadFile) => {
+      console.log('---upload fail---')
+      store.commit('addImgComponent', {
+        src: file.url,
+      })
+    }
 
     return {
       components,
@@ -82,6 +103,8 @@ export default defineComponent({
       setActive,
       currentElement,
       handleChange,
+      handleUploadSuccess,
+      handleUploadFail,
     }
   }
 })

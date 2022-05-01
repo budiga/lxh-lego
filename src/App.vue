@@ -1,20 +1,16 @@
 <template>
   <div class="app-container">
     <a-spin v-if="showLoading" tip="读取中" class="global-spinner"/>
-    <uploder action="http://baidu.com/api/upload" drag />
     <router-view/>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import Uploder from '@/components/Uploader.vue'
+// import Uploder from '@/components/Uploader.vue'
 
 export default defineComponent({
   name: 'App',
-  components: {
-    Uploder,
-  },
   setup() {
     const showLoading = ref(true)
     setTimeout(() => {

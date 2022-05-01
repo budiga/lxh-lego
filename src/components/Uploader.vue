@@ -21,7 +21,7 @@
       :style="{display: 'none'}"
       @change="handleFileChange"
     />
-    <ul class="upload-list">
+    <ul v-if="showUploadList" class="upload-list">
       <li
         v-for="file in filesList"
         :class="`uploaded-file upload-${file.status}`"
@@ -50,6 +50,7 @@ import { DeleteOutlined, LoadingOutlined, FileOutlined } from '@ant-design/icons
 import { last } from 'lodash-es'
 
 type UploadStatus = 'ready' | 'loading' | 'success' | 'error'
+type FileListType = 'picture' | 'text'
 type CheckUpload = (file: File) => boolean | Promise<File>
 
 export interface IUploadFile {
@@ -59,6 +60,7 @@ export interface IUploadFile {
   status: UploadStatus;
   raw: File;
   resp?: any;
+  url?: any;
 }
 export default defineComponent({
   props: {
@@ -76,14 +78,22 @@ export default defineComponent({
     autoUpload: {
       type: Boolean,
       default: true,
-    }
+    },
+    listType: {
+      type: String as PropType<FileListType>,
+      default: 'text'
+    },
+    showUploadList: {
+      type: Boolean,
+      default: true,
+    },
   },
   components: {
     DeleteOutlined,
     LoadingOutlined,
     FileOutlined
   },
-  setup(props) {
+  setup(props, { emit }) {
     const fileInput = ref<null | HTMLInputElement>(null)
     const filesList = ref<IUploadFile[]>([])
     const isDragover = ref(false)
@@ -156,9 +166,11 @@ export default defineComponent({
         readyFile.status = 'success'
         readyFile.resp = res.data
         console.log('----upload file res----', res)
+        emit('success', { res: res.data, file: readyFile, list: filesList.value })
       }).catch((error) => {
         readyFile.status = 'error'
         console.log('----upload file error----', error)
+        emit('fail', { error, file: readyFile, list: filesList.value })
       }).finally(() => {
         if (fileInput.value) {
           fileInput.value.value = ''
@@ -173,6 +185,19 @@ export default defineComponent({
         status: 'ready',
         raw: uploadedFile
       })
+      if (props.listType === 'picture') {
+        try {
+          fileObj.url = URL.createObjectURL(uploadedFile)
+        } catch (error) {
+          console.log('createObjectURL error:', error)
+        }
+        // 方式二：通过FileReader来读取文件
+        // const fileReader = new FileReader()
+        // fileReader.readAsDataURL(uploadedFile)
+        // fileReader.addEventListener('load', () => {
+        //   fileObj.url = fileReader.result as string
+        // })
+      }
       filesList.value.push(fileObj)
       if (props.autoUpload) {
         postFile(fileObj)
@@ -216,8 +241,8 @@ export default defineComponent({
 
 <style lang="scss">
 .upload-area {
-  width: 200px;
-  height: 200px;
+  width: 100px;
+  height: 60px;
   border: 1px solid #999;
   border-radius: 8px;
 

@@ -193,6 +193,14 @@ const editor: Module<EditorProps, GlobalDataProps> = {
       }
       state.components.push(newComponent)
     },
+    addImgComponent(state, props) {
+      const newComponent: ComponentData = {
+        id: uuidv4(),
+        name: 'l-image',
+        props,
+      }
+      state.components.push(newComponent)
+    },
     // addComponent: setDirtyWrapper((state, component: ComponentData) => {
     //   component.layerName = '图层' + (state.components.length + 1)
     //   state.components.push(component)
