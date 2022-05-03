@@ -9,7 +9,7 @@ export interface GlobalStatus {
   };
 }
 
-const global: Module<GlobalStatus, GlobalDataProps> = {
+const globalModule: Module<GlobalStatus, GlobalDataProps> = {
   state: {
     requestNumber: 0,
     opNames: {},
@@ -44,4 +44,4 @@ const global: Module<GlobalStatus, GlobalDataProps> = {
   }
 }
 
-export default global
+export default globalModule

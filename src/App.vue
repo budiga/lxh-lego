@@ -7,11 +7,10 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
+// import Uploder from '@/components/Uploader.vue'
 
 export default defineComponent({
   name: 'App',
-  components: {
-  },
   setup() {
     const showLoading = ref(true)
     setTimeout(() => {

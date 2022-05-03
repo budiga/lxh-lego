@@ -94,7 +94,7 @@ export interface ComponentData {
   layerName?: string;
 }
 export const testComponents: ComponentData[] = [
-  { id: uuidv4(), name: 'l-text', layerName:'图层1', props: { text: 'hello', fontSize: '20px', color: 'red', 'lineHeight': '1', textAlign: 'left', fontFamily: '', width: '100px', height: '100px', backgroundColor: '#666', left: '100px', top: '150px' }},
+  { id: uuidv4(), name: 'l-text', layerName:'图层1', props: { text: 'hello', fontSize: '20px', color: '#000000', 'lineHeight': '1', textAlign: 'left', fontFamily: '', width: '100px', height: '100px', backgroundColor: '#666', left: '100px', top: '150px' }},
   { id: uuidv4(), name: 'l-text', layerName:'图层2', props: { text: 'hello2', fontSize: '10px', fontWeight: 'bold', 'lineHeight': '2', textAlign: 'left', fontFamily: '' }},
   { id: uuidv4(), name: 'l-text', layerName:'图层3', props: { text: 'hello3', fontSize: '40px', actionType: 'url', url: 'https://www.baidu.com', 'lineHeight': '3', textAlign: 'left', fontFamily: '' }},
   // { id: uuidv4(), name: 'l-image', layerName:'图层4', props: { ...imageDefaultProps, src: 'http://vue-maker.oss-cn-hangzhou.aliyuncs.com/vue-marker/5f3e3a17c305b1070f455202.jpg', width: '100px' }},
@@ -189,6 +189,14 @@ const editor: Module<EditorProps, GlobalDataProps> = {
       const newComponent: ComponentData = {
         id: uuidv4(),
         name: 'l-text',
+        props,
+      }
+      state.components.push(newComponent)
+    },
+    addImgComponent(state, props) {
+      const newComponent: ComponentData = {
+        id: uuidv4(),
+        name: 'l-image',
         props,
       }
       state.components.push(newComponent)
@@ -330,7 +338,7 @@ const editor: Module<EditorProps, GlobalDataProps> = {
         }
       }
     },
-    updateComponent: setDirtyWrapper((state, { key, value, id, isRoot }: UpdateComponentData) => {
+    updateComponent2: setDirtyWrapper((state, { key, value, id, isRoot }: UpdateComponentData) => {
       const updatedComponent = state.components.find((component) => component.id === (id || state.currentElement))
       if (updatedComponent) {
         if (isRoot) {
@@ -353,6 +361,12 @@ const editor: Module<EditorProps, GlobalDataProps> = {
 
       }
     }),
+    updateComponent(state, {key, value}) {
+      const updatedComponent = state.components.find((component) => component.id === (state.currentElement))
+      if (updatedComponent) {
+        updatedComponent.props[key as keyof TextComponentProps] = value
+      }
+    },
     updatePage: setDirtyWrapper((state, { key, value, isRoot, isSetting }) => {
       if (isRoot) {
         state.page[key as keyof PageData] = value
